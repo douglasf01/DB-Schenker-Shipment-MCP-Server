@@ -15,7 +15,7 @@ source .venv/bin/activate
 uv sync
 
 # Check if Playwright has been installed
-if [! -f ".playwright_installed" ]; then
+if [ ! -f ".playwright_installed" ]; then
     echo "Installing Playwright..."
     playwright install
     # Create a flag file to indicate that Playwright is installed
