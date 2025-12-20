@@ -5,7 +5,7 @@ A tool for gathering and displaying information about DB Schenker shipments.
 
 
 ## Description
-DB Schenker is a global logistics provider. This project provides a server and a tool for gathering and displaying information about DB Schenker shipments. The MCP (Model Context Protocol) server allows for easy access to shipment data, and the information gatherer tool helps to clean and display this data in a user-friendly format.
+This project provides a server and a tool for gathering and displaying information about DB Schenker shipments. The MCP (Model Context Protocol) server enables easy connectivity to AI applications and external systems. Additionally, the project includes a tool that cleans and displays this data in a user-friendly format, making it easily parsable by an LLM.
 
 ## Table of Contents
 - [Installation](#installation)
@@ -47,10 +47,10 @@ Before you begin, ensure you have met the following requirements:
      - Install Playwright (if not already installed).
      - Start the MCP server and open the tool in your default web browser.
 
-  **Note:** You can run ./run.sh multiple times to launch the tool. It will handle the setup and start the server each time.
+  **Note:** The script can be reused to launch the tool. It will handle the setup and start the server each time.
 
 ## Usage
-1. After running the script, the tool will open in your web browser at `http://localhost:6274`.
+1. After running the script, the tool will automatically open in your standard web browser at `http://localhost:6274`.
 2. Ensure the following pre-chosen alternatives are selected:
    - **Transport Type:** STDIO
    - **Command:** fastmcp
