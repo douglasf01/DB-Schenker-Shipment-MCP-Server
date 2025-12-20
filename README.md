@@ -51,7 +51,7 @@ Before you begin, ensure you have met the following requirements:
 
 ## Usage
 1. After running the script, the tool will automatically open in your standard web browser at `http://localhost:6274`.
-2. Ensure the following pre-chosen alternatives are selected:
+2. Ensure the following alternatives are selected:
    - **Transport Type:** STDIO
    - **Command:** fastmcp
    - **Arguments:** run server.py
