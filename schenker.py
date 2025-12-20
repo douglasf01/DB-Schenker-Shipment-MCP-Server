@@ -41,11 +41,11 @@ def details(soup):
         key = soup[i].get_text(strip=True)
         if i + 1 < len(soup):
             value = soup[i + 1].get_text(strip=True)
-            # Check if the key is "Consignment Number/Waybill Number" and the next value is a number
+            #Check if the key is "Consignment Number/Waybill Number" and the next value is a number
             if key == "Consignment Number/Waybill Number" and i + 2 < len(soup) and soup[i + 2].get_text(strip=True).isdigit():
                 next_value = soup[i + 2].get_text(strip=True)
                 markdown_table += f"| {key} | {value}/{next_value} |\n"
-                i += 3  # Skip the next two elements since we've already processed them
+                i += 3  #Skip the next two elements since we've already processed them
                 continue
         else:
             value = ""
@@ -55,7 +55,7 @@ def details(soup):
 
 def history(soup):
     table_data = []
-    # Iterate over the rows of the table
+    #Iterate over the rows of the table
     for row in soup.find_all("tr"):
         row_data = []
         for cell in row.find_all(["th", "td"]):
