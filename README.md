@@ -47,7 +47,7 @@ Before you begin, ensure you have met the following requirements:
      - Install Playwright (if not already installed).
      - Start the MCP server and open the tool in your default web browser.
 
-  **Note:** The script can be reused to launch the tool. It will handle the setup and start the server each time.
+  **Note:** The script can be reused to launch the tool.
 
 ## Usage
 1. After running the script, the tool will automatically open in your standard web browser at `http://localhost:6274`.
