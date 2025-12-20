@@ -48,7 +48,7 @@ Before you begin, ensure you have met the following requirements:
      - Start the MCP server and open the tool in your default web browser.
 
 ## Usage
-1. The tool will open in your web browser at `http://localhost:6274`.
+1. After running the script, the tool will open in your web browser at `http://localhost:6274`.
 2. Ensure the following pre-chosen alternatives are selected:
    - **Transport Type:** STDIO
    - **Command:** fastmcp
