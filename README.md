@@ -47,7 +47,7 @@ Before you begin, ensure you have met the following requirements:
 
 ## Usage
 
-1. The tool will open in your web browser at `http://localhost:3000`.
+1. The tool will open in your web browser at `http://localhost:6274`.
 2. Ensure the following pre-chosen alternatives are selected:
    - **Transport Type:** STDIO
    - **Command:** fastmcp

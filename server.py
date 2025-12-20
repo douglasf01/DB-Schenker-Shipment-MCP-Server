@@ -29,7 +29,6 @@ async def soup_cleaning(trackingNum):
     else:
         raise ValueError("Failed to retrieve the webpage content.")
 
-
 # Run the server
 if __name__ == "__main__":
     mcp.run()
