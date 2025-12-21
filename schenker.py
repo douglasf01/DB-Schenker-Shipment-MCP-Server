@@ -1,6 +1,6 @@
 from fastmcp import FastMCP
 from bs4 import BeautifulSoup
-from playwright.async_api import async_playwright, Error as PlaywrightError, TimeoutError as PlaywrightTimeoutError
+from playwright.async_api import async_playwright
 import logging
 import requests
 import asyncio
@@ -8,81 +8,38 @@ import asyncio
 USER_AGENT = "Mozilla/5.0 (X11; Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.7499.169 Safari/537.36"
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+async def get_soup_from_url(url) -> str:
 
-async def get_soup_from_url(url, max_retries=3, timeout=20000) -> BeautifulSoup:
-    
     """
-    Retrieves the content of a webpage using playwright, parses it with BeautifulSoup, and handles errors and retries.
+    Retrieves the content of a webpage using playwright, parses it with BeautifulSoup.
 
     Args:
         url (str): The URL to DB Schenker.
-        max_retries (int): Maximum number of retries. Defaults to 3.
-        timeout (int): Timeout in milliseconds. Defaults to 20000.
     Returns:
-        BeautifulSoup: Parsed HTML content of the webpage, or None if fetching fails after all retries.
-    Raises:
-        Logs errors for timeouts, Playwright errors, and other unexpected errors.
+        BeautifulSoup: Parsed HTML content of the webpage, or None if fetching fails.
     """
 
-    retries = 0
-    while retries < max_retries:
-        async with async_playwright() as p:
-            browser = await p.chromium.launch()
-            context = await browser.new_context(user_agent=USER_AGENT)
-            page = await context.new_page()
-            try:
-                await page.goto(url, timeout=timeout)
-                await page.wait_for_load_state("networkidle", timeout=timeout)
-                try:
-                    locator = page.get_by_text("See more")
-                    count = await locator.count()
-                    if count:
-                        await page.get_by_text('See more').evaluate("element => element.click()")
-                        await page.wait_for_load_state("networkidle", timeout=timeout)
-                except Exception as e:
-                    logging.error(f"Error clicking 'See more' button, some information might be missing: {e}")
-                    pass
+    async with async_playwright() as p:
+        browser = await p.chromium.launch()
+        context = await browser.new_context(user_agent=USER_AGENT) 
+        page = await context.new_page()
+        try:
+            await page.goto(url)
+            await page.wait_for_load_state("networkidle")
 
-                content = await page.content()
-                soup = BeautifulSoup(content, 'html.parser')
-                return soup
+            #Triggering action handler
+            await page.get_by_text('See more').evaluate("element => element.click()")
+            
+            content = await page.content()
+            soup = BeautifulSoup(content, 'html.parser')
 
-            except PlaywrightTimeoutError:
-                logging.error(f"Timeout error fetching the URL: {url}")
-                retries += 1
-                await asyncio.sleep(1) 
+            return soup
+        except Exception as e:
+            logging.info(f"Error fetching the URL: {e}")
+            return None
+        finally:
+            await browser.close()
 
-            except PlaywrightError as e:
-                logging.error(f"Playwright error fetching the URL: {e}")
-                retries += 1
-                await asyncio.sleep(1)
-
-            except Exception as e:
-                logging.error(f"Unexpected error fetching the URL: {e}")
-                retries += 1
-                await asyncio.sleep(1)
-
-            finally:
-                try:
-                    if page is not None:
-                        await page.close()
-                except Exception:
-                    logging.debug("Error closing page", exc_info=1)
-
-                try:
-                    if context is not None:
-                        await context.close()
-                except Exception:
-                    logging.debug("Error closing context", exc_info=1)
-
-                try:
-                    if browser is not None:
-                        await browser.close()
-                except Exception:
-                    logging.debug("Error closing browser", exc_info=1)
-                
-        logging.error(f"Failed to fetch URL after {max_retries} retries: {url}")
-        return None
 
 def details(soup):
     """

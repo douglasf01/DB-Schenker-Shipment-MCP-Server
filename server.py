@@ -34,7 +34,7 @@ async def soup_cleaning(trackingNum):
     
     if soup is not None:
         soup_details= soup.select(".tracking-details-header, .tracking-details-value, [data-test='service_name_value'], [data-test='consignee_reference_value'], [data-test='shipper_reference_value']")
-        soup_history = soup.select_one(".pt-table")
+        soup_history = soup.select_one(".pt-table.ng-star-inserted")
         
         details_out = details(soup_details)
         history_out = history(soup_history)
