@@ -20,18 +20,53 @@ This project provides a server and a tool for gathering and displaying informati
 - Provides a tool for cleaning and displaying shipment data from DB Schenker.
 - Displays shipment details in a user and LLM-friendly markdown table.
 
+---
+
 ## Prerequisites
 Before you begin, ensure you have met the following requirements:
 
-- Python >= 3.13
-- Node.js: ^22.7.5 (withing major version 22.x.x)
-- uv package handler >= 0.9.18
+- **Python** >= 3.13
+- **Node.js** ^22.7.5 (within major version 22.x.x)
+- **uv** package manager >= 0.9.18
+
+### Installing uv
+You can install `uv` using `curl`:
+```sh
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+### Installing Node.js
+Node.js is best managed using `nvm` (Node Version Manager). Install `nvm` with:
+```sh
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
+```
+
+Initializes NVM in your current shell session:
+```sh
+\. "$HOME/.nvm/nvm.sh"
+```
+
+Install the latest version of Node.js (v22.x.x):
+```sh
+nvm install 22
+```
+
+Verify the installation by checking the Node.js and npm versions:
+```sh
+node -v  # Should display "v22.X.X"
+npm -v   # Should display the corresponding npm version
+```
+For more information, you can visist [Node.js](https://nodejs.org/en/download)
+
+
+
 
 ## Installation
 1. Clone the repository:
    ```sh
    git clone <repository-url>
    cd <repository-folder>
+   ```
 
 2. Grant execute permission to the script:
    ```sh
