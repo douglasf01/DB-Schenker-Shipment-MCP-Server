@@ -1,6 +1,7 @@
 from fastmcp import FastMCP
 from bs4 import BeautifulSoup
-from playwright.async_api import async_playwright 
+from playwright.async_api import async_playwright, Error as PlaywrightError, TimeoutError as PlaywrightTimeoutError
+import logging
 import logging
 import requests
 import asyncio
@@ -9,30 +10,65 @@ USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Ge
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
+async def get_soup_from_url(url, max_retries=3, timeout=20000) -> BeautifulSoup:
+    retries = 0
+    while retries < max_retries:
+        async with async_playwright() as p:
+            browser = await p.chromium.launch()
+            context = await browser.new_context(user_agent=USER_AGENT)
+            page = await context.new_page()
+            try:
+                await page.goto(url, timeout=timeout)
+                await page.wait_for_load_state("networkidle", timeout=timeout)
 
-async def get_soup_from_url(url) -> str:
-    async with async_playwright() as p:
-        browser = await p.chromium.launch()
-        context = await browser.new_context(user_agent=USER_AGENT) 
-        page = await context.new_page()
-        try:
-            await page.goto(url)
-            await page.wait_for_load_state("networkidle")
+                try:
+                    locator = page.get_by_text("See more")
+                    count = await locator.count()
+                    if count:
+                        await page.get_by_text('See more').evaluate("element => element.click()")
+                        await page.wait_for_load_state("networkidle", timeout=timeout)
+                except Exception as e:
+                    logging.error(f"Error clicking 'See more' button, some information might be missing: {e}")
+                    pass
 
-            #Triggering action handler
-            await page.get_by_text('See more').evaluate("element => element.click()")
-            
-            content = await page.content()
-            soup = BeautifulSoup(content, 'html.parser')
+                content = await page.content()
+                soup = BeautifulSoup(content, 'html.parser')
+                return soup
 
-            return soup
-        except Exception as e:
-            logging.info(f"Error fetching the URL: {e}")
-            return None
-        finally:
-            await browser.close()
+            except PlaywrightTimeoutError:
+                logging.error(f"Timeout error fetching the URL: {url}")
+                retries += 1
+                await asyncio.sleep(1) 
 
+            except PlaywrightError as e:
+                logging.error(f"Playwright error fetching the URL: {e}")
+                retries += 1
+                await asyncio.sleep(1)
 
+            except Exception as e:
+                logging.error(f"Unexpected error fetching the URL: {e}")
+                retries += 1
+                await asyncio.sleep(1)
+
+            finally:
+                try:
+                    if page is not None:
+                        await page.close()
+                except Exception:
+                    logging.debug("Error closing page", exc_info=1)
+                try:
+                    if context is not None:
+                        await context.close()
+                except Exception:
+                    logging.debug("Error closing context", exc_info=1)
+                try:
+                    if browser is not None:
+                        await browser.close()
+                except Exception:
+                    logging.debug("Error closing browser", exc_info=1)
+                
+        logging.error(f"Failed to fetch URL after {max_retries} retries: {url}")
+        return None
 
 def details(soup):
     markdown_table = "| Key | Value |\n| --- | --- |\n"
