@@ -130,7 +130,7 @@ def history(soup):
     for row in soup.find_all("tr"):
         row_data = []
         cells = row.find_all(["th", "td"])
-        #Skip the first cell of each row
+        #Skip the first cell of each row (empty)
         if cells:
             cells = cells[1:]
         for cell in cells:
