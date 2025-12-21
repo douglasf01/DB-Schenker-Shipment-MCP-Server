@@ -13,7 +13,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 async def get_soup_from_url(url, max_retries=3, timeout=20000) -> BeautifulSoup:
     
     """
-    Retrieves the content of a webpage, parses it with BeautifulSoup, and handles errors and retries.
+    Retrieves the content of a webpage using playwright, parses it with BeautifulSoup, and handles errors and retries.
 
     Args:
         url (str): The URL to DB Schenker.
