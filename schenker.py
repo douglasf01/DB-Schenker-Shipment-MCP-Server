@@ -11,6 +11,20 @@ USER_AGENT = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Ge
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 async def get_soup_from_url(url, max_retries=3, timeout=20000) -> BeautifulSoup:
+    
+    """
+    Retrieves the content of a webpage, parses it with BeautifulSoup, and handles errors and retries.
+
+    Args:
+        url (str): The URL to DB Schenker.
+        max_retries (int): Maximum number of retries. Defaults to 3.
+        timeout (int): Timeout in milliseconds. Defaults to 20000.
+    Returns:
+        BeautifulSoup: Parsed HTML content of the webpage, or None if fetching fails after all retries.
+    Raises:
+        Logs errors for timeouts, Playwright errors, and other unexpected errors.
+    """
+
     retries = 0
     while retries < max_retries:
         async with async_playwright() as p:
@@ -20,7 +34,6 @@ async def get_soup_from_url(url, max_retries=3, timeout=20000) -> BeautifulSoup:
             try:
                 await page.goto(url, timeout=timeout)
                 await page.wait_for_load_state("networkidle", timeout=timeout)
-
                 try:
                     locator = page.get_by_text("See more")
                     count = await locator.count()
@@ -56,11 +69,13 @@ async def get_soup_from_url(url, max_retries=3, timeout=20000) -> BeautifulSoup:
                         await page.close()
                 except Exception:
                     logging.debug("Error closing page", exc_info=1)
+
                 try:
                     if context is not None:
                         await context.close()
                 except Exception:
                     logging.debug("Error closing context", exc_info=1)
+
                 try:
                     if browser is not None:
                         await browser.close()
@@ -71,6 +86,15 @@ async def get_soup_from_url(url, max_retries=3, timeout=20000) -> BeautifulSoup:
         return None
 
 def details(soup):
+    """
+    Extracts package details in key-value pairs from parsed HTML content and formats them into a markdown table.
+
+    Args:
+        soup (BeautifulSoup): Parsed HTML content containing key-value pairs.
+    Returns:
+        str: A markdown table with keys and values extracted from the HTML content.
+
+    """
     markdown_table = "| Key | Value |\n| --- | --- |\n"
     i = 0
     while i < len(soup):
@@ -90,6 +114,18 @@ def details(soup):
     return markdown_table
 
 def history(soup):
+    
+    """
+    Extracts shipping history data from parsed HTML content and formats it as a markdown table
+
+    Args:
+        soup (BeautifulSoup): Parsed HTML content containing shipping history.
+    Returns:
+        str: A markdown table with data extracted from the HTML table.
+    Raises:
+        ValueError: If the input soup is None or does not contain a table.
+    """
+
     table_data = []
     #Iterate over the rows of the table
     for row in soup.find_all("tr"):
@@ -104,7 +140,6 @@ def history(soup):
                 return table_data
             row_data.append(cell_text if cell_text else "-")
         table_data.append(row_data)
-
     if not table_data:
         logging.ERROR("Table is empty")
         return ""
