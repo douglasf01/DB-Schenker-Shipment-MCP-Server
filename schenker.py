@@ -45,7 +45,7 @@ def details(soup):
             if key == "Consignment Number/Waybill Number" and i + 2 < len(soup) and soup[i + 2].get_text(strip=True).isdigit():
                 next_value = soup[i + 2].get_text(strip=True)
                 markdown_table += f"| {key} | {value}/{next_value} |\n"
-                i += 3  #Skip the next two elements since we've already processed them
+                i += 3  #Skip the next two elements, already processed
                 continue
         else:
             value = ""
@@ -58,13 +58,21 @@ def history(soup):
     #Iterate over the rows of the table
     for row in soup.find_all("tr"):
         row_data = []
-        for cell in row.find_all(["th", "td"]):
+        cells = row.find_all(["th", "td"])
+        #Skip the first cell of each row
+        if cells:
+            cells = cells[1:]
+        for cell in cells:
             cell_text = cell.get_text(strip=True)
             if cell_text.startswith("Package"):
                 return table_data
             row_data.append(cell_text if cell_text else "-")
         table_data.append(row_data)
-    
+
+    if not table_data:
+        logging.ERROR("Table is empty")
+        return ""
+
     markdown_table = ""
     markdown_table += "| " + " | ".join(table_data[0]) + " |\n"
     markdown_table += "| " + " | ".join(["---"] * len(table_data[0])) + " |\n"

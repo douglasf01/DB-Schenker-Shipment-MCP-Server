@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Check if the virtual environment directory exists
+#Check if the virtual environment directory exists
 if [ -d ".venv" ]; then
     echo "Virtual environment exists."
 else
@@ -8,20 +8,20 @@ else
     uv venv
 fi
 
-# Activate the virtual environment
+#Activate the virtual environment
 source .venv/bin/activate
 
-# Sync dependencies
+#Sync dependencies
 uv sync
 
-# Check if Playwright has been installed
+#Check if Playwright has been installed
 if [ ! -f ".playwright_installed" ]; then
     echo "Installing Playwright..."
     playwright install
-    # Create a flag file to indicate that Playwright is installed
+    #Create a flag file to indicate that Playwright is installed
     touch .playwright_installed
 else
     echo "Playwright is already installed."
 fi
-# Run the server
+#Run the server
 npx @modelcontextprotocol/inspector fastmcp run server.py

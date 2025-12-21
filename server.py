@@ -19,7 +19,7 @@ async def soup_cleaning(trackingNum):
     
     if soup is not None:
 
-        soup_details= soup.select(".tracking-details-header, .tracking-details-value, [data-test='service_name_value']")
+        soup_details= soup.select(".tracking-details-header, .tracking-details-value, [data-test='service_name_value'], [data-test='consignee_reference_value'], [data-test='shipper_reference_value']")
         details_out = details(soup_details)
 
         soup_history = soup.select_one(".pt-table")
