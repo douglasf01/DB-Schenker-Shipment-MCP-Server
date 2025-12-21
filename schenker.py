@@ -128,7 +128,7 @@ def history(soup):
     table_data = []
     #Iterate over the rows of the table
     if soup is None:
-        logging.ERROR("Table is empty")
+        logging.error("Table is empty")
         return ""
     else:
         for row in soup.find_all("tr"):
