@@ -2,7 +2,6 @@ from fastmcp import FastMCP
 from bs4 import BeautifulSoup
 from playwright.async_api import async_playwright, Error as PlaywrightError, TimeoutError as PlaywrightTimeoutError
 import logging
-import logging
 import requests
 import asyncio
 
