@@ -78,14 +78,12 @@ def history(soup):
         soup (BeautifulSoup): Parsed HTML content containing shipping history.
     Returns:
         str: A markdown table with data extracted from the HTML table.
-    Raises:
-        ValueError: If the input soup is None or does not contain a table.
     """
 
     table_data = []
     #Iterate over the rows of the table
     if soup is None:
-        logging.error("Table is empty")
+        logging.error("Shipping table could not be found")
         return ""
     else:
         for row in soup.find_all("tr"):
