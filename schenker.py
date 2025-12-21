@@ -127,21 +127,22 @@ def history(soup):
 
     table_data = []
     #Iterate over the rows of the table
-    for row in soup.find_all("tr"):
-        row_data = []
-        cells = row.find_all(["th", "td"])
-        #Skip the first cell of each row (empty)
-        if cells:
-            cells = cells[1:]
-        for cell in cells:
-            cell_text = cell.get_text(strip=True)
-            if cell_text.startswith("Package"):
-                return table_data
-            row_data.append(cell_text if cell_text else "-")
-        table_data.append(row_data)
-    if not table_data:
+    if soup is None:
         logging.ERROR("Table is empty")
         return ""
+    else:
+        for row in soup.find_all("tr"):
+            row_data = []
+            cells = row.find_all(["th", "td"])
+            #Skip the first cell of each row (empty)
+            if cells:
+                cells = cells[1:]
+            for cell in cells:
+                cell_text = cell.get_text(strip=True)
+                if cell_text.startswith("Package"):
+                    return table_data
+                row_data.append(cell_text if cell_text else "-")
+            table_data.append(row_data)
 
     markdown_table = ""
     markdown_table += "| " + " | ".join(table_data[0]) + " |\n"
