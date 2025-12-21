@@ -24,4 +24,8 @@ else
     echo "Playwright is already installed."
 fi
 #Run the server
+<<<<<<< HEAD
 npx @modelcontextprotocol/inspector fastmcp run server.py
+=======
+npx @modelcontextprotocol/inspector fastmcp run server.py
+>>>>>>> 9a995b142b3527f8456b0b047df9c9d11c5c4f42
