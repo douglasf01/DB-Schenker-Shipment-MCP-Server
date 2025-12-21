@@ -8,7 +8,7 @@ import asyncio
 USER_AGENT = "Mozilla/5.0 (X11; Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.7499.169 Safari/537.36"
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-async def get_soup_from_url(url) -> str:
+async def get_soup_from_url(url) -> BeautifulSoup:
 
     """
     Retrieves the content of a webpage using playwright, parses it with BeautifulSoup.
