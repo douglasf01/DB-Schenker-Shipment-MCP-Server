@@ -1,4 +1,3 @@
-from fastmcp import FastMCP
 from bs4 import BeautifulSoup
 from playwright.async_api import async_playwright
 import logging
