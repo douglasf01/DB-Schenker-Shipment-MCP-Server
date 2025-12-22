@@ -82,9 +82,6 @@ def history(soup):
 
     table_data = []
     #Iterate over the rows of the table
-    if soup is None:
-        logging.error("Shipping table could not be found")
-        return ""
     else:
         for row in soup.find_all("tr"):
             row_data = []
