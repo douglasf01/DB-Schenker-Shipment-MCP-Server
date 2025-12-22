@@ -23,5 +23,5 @@ if [ ! -f ".playwright_installed" ]; then
 else
     echo "Playwright is already installed."
 fi
-#Run the server
+#Run the inspector and server 
 npx @modelcontextprotocol/inspector fastmcp run server.py
