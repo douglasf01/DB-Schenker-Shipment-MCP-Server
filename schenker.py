@@ -1,7 +1,6 @@
 from bs4 import BeautifulSoup
 from playwright.async_api import async_playwright
 import logging
-import requests
 import asyncio
 
 USER_AGENT = "Mozilla/5.0 (X11; Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.7499.169/.170 Safari/537.36"
