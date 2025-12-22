@@ -10,5 +10,4 @@ dependencies = [
     "fastmcp>=2.14.0",
     "logging>=0.4.9.6",
     "playwright>=1.57.0",
-    "requests>=2.32.5",
 ]
