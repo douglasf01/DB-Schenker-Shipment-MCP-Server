@@ -5,7 +5,7 @@ A project for gathering and displaying information about DB Schenker shipments u
 
 
 ## Description
-This project provides a server and a tool for gathering and displaying information about DB Schenker shipments. The MCP (Model Context Protocol) server enables easy connectivity to AI applications and external systems. A bash file is included which will start MCP inspector were the tool can be tested.  
+This project provides a server and a tool for gathering and displaying information about DB Schenker shipments. The MCP (Model Context Protocol) server enables easy connectivity to AI applications and external systems. A bash file is included which will start MCP inspector, and the server, were the tool can be tested.  
 
 ## Table of Contents
 
