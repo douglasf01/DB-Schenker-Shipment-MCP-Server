@@ -5,22 +5,13 @@ A project for gathering and displaying information about DB Schenker shipments u
 
 
 ## Description
-This project provides a server and a tool for gathering and displaying information about DB Schenker shipments. The MCP (Model Context Protocol) server enables easy connectivity to AI applications and external systems. Additionally, the project includes a tool that cleans and displays this data in a user-friendly format, which is easily parsable by an LLM.
+This project provides a server and a tool for gathering and displaying information about DB Schenker shipments. The MCP (Model Context Protocol) server enables easy connectivity to AI applications and external systems. A bash file is included which will start MCP inspector were the tool can be tested.  
 
 ## Table of Contents
 
-- [Features](#features)
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
 - [Usage](#usage)
-
-
-## Features
-- Automatically starts the MCP server and opens the tool in your web browser.
-- Provides a tool for cleaning and displaying shipment data from DB Schenker.
-- Displays shipment details in a user and LLM-friendly markdown table.
-
----
 
 ## Prerequisites
 Before you begin, ensure you have met the following requirements:
@@ -82,12 +73,12 @@ For more information, you can visist [Node.js](https://nodejs.org/en/download)
      - Activate the virtual environment.
      - Install all necessary dependencies using `uv sync`.
      - Install Playwright (if not already installed).
-     - Start the MCP server and open the tool in your default web browser.
+     - Start the MCP server and open MCP inspector in your default web browser, where the tool can be tested.
 
-  **Note:** The script can be reused to launch the tool.
+  **Note:** The script can be reused to test the tool.
 
 ## Usage
-1. After running the script, the tool will automatically open in your web browser at `http://localhost:6274`.
+1. After running the script, MCP inspector will automatically open in your web browser at `http://localhost:6274`.
 2. Ensure the following alternatives are selected:
    - **Transport Type:** STDIO
    - **Command:** fastmcp
