@@ -1,6 +1,8 @@
 # DB Schenker Shipment MCP Server
 A project for gathering and displaying information about DB Schenker shipments using their public website.
 
+![Screenshot from package details.](screenshot.png)
+
 **Note:** This guide is specifically for Linux/Unix systems.
 
 
