@@ -1,27 +1,13 @@
 #!/bin/bash
+# Install everything and open the server in MCP Inspector.
+set -e
+cd "$(dirname "$0")"
 
-#Check if the virtual environment directory exists
-if [ -d ".venv" ]; then
-    echo "Virtual environment exists."
-else
-    echo "Creating virtual environment..."
-    uv venv
-fi
-
-#Activate the virtual environment
-source .venv/bin/activate
-
-#Sync dependencies
+# Install Python dependencies into .venv
 uv sync
 
-#Check if Playwright has been installed
-if [ ! -f ".playwright_installed" ]; then
-    echo "Installing Playwright..."
-    playwright install
-    #Create a flag file to indicate that Playwright is installed
-    touch .playwright_installed
-else
-    echo "Playwright is already installed."
-fi
-#Run the inspector and server 
-npx @modelcontextprotocol/inspector fastmcp run server.py
+# Download the Chromium browser used by Playwright (skipped if already installed)
+uv run playwright install chromium
+
+# Start MCP Inspector with the server
+npx @modelcontextprotocol/inspector uv run fastmcp run server.py

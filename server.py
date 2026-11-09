@@ -1,47 +1,51 @@
-from schenker import get_soup_from_url, details, history
-from fastmcp import FastMCP
+"""MCP server that tracks DB Schenker shipments."""
+
 import re
 
-mcp = FastMCP(name="Local MCP")
+from fastmcp import FastMCP
+from fastmcp.exceptions import ToolError
 
-LINK = "https://www.dbschenker.com/app/tracking-public/?refNumber="
+from schenker import TRACKING_URL, get_soup_from_url, parse_tracking_page
+
+mcp = FastMCP(name="DB Schenker Shipment Tracker")
+
+TRACKING_NUMBER = re.compile(r"180\d{7}")
+
 
 @mcp.tool
-async def soup_cleaning(trackingNum):
-    
-    """
-    Retrieves and cleans tracking information from DB Schenker based on a tracking number.
-    
+async def track_shipment(tracking_number: str) -> str:
+    """Look up a DB Schenker shipment and return its details and history.
+
     Args:
-        trackingNum (int or str): The tracking number, which must be an integer or a (digit) string starting with '180' and be 10 digits long.
+        tracking_number: The DB Schenker tracking number. It is 10 digits
+            long and starts with 180, for example 1806203236.
+
     Returns:
-        str: Concatenated details and history of the tracking information.
-    Raises:
-        ValueError: If the tracking number is invalid or if the webpage content cannot be retrieved.
+        Markdown tables with the shipment details and the tracking history.
     """
+    tracking = tracking_number.strip().replace(" ", "")
+    if not TRACKING_NUMBER.fullmatch(tracking):
+        raise ToolError(
+            f"Invalid tracking number '{tracking_number}'. A DB Schenker tracking "
+            "number is 10 digits and starts with 180, for example 1806203236. "
+            "Ask the user to check the number."
+        )
 
-    if isinstance(trackingNum, int):
-        tracking = str(trackingNum)
-    elif isinstance(trackingNum, str):
-        tracking = trackingNum.strip()
-    else:
-        raise ValueError("Tracking number must be an integer or a digit string")
-    if not re.fullmatch(r"180\d{7}", tracking):
-        raise ValueError("Tracking number must starts with '180' and be 10 digits")
+    soup = await get_soup_from_url(TRACKING_URL + tracking)
+    if soup is None:
+        raise ToolError(
+            "Could not load the DB Schenker tracking page. The site may be down "
+            "or blocking the request. Try again later."
+        )
 
-    full_link = LINK + tracking
-    soup = await get_soup_from_url(full_link)
-    
-    if soup is not None:
-        soup_details= soup.select(".tracking-details-header, .tracking-details-value, [data-test='service_name_value'], [data-test='consignee_reference_value'], [data-test='shipper_reference_value']")
-        soup_history = soup.select_one(".pt-table.ng-star-inserted")
-        
-        details_out = details(soup_details)
-        history_out = history(soup_history)
-        return details_out  + "\n" + history_out;
-    else:
-        raise ValueError("Failed to retrieve the webpage content.")
+    report = parse_tracking_page(soup)
+    if report is None:
+        raise ToolError(
+            f"No shipment found for tracking number {tracking}. "
+            "Ask the user to check the number."
+        )
+    return report
 
-#Run the server
+
 if __name__ == "__main__":
     mcp.run()
