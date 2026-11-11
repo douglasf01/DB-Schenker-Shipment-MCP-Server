@@ -3,6 +3,8 @@
 An MCP (Model Context Protocol) server that lets an AI assistant, such as Claude, look up DB Schenker shipments.
 You give it a tracking number and it returns the shipment details and tracking history as markdown tables.
 
+Built as my solution to the [Sendify Code Challenge 2026](https://github.com/holtid/Sendify-Code-Challenge-2026).
+
 > **Note:** This project was built for DB Schenker's public tracking website (December 2025 to February 2026).
 > DB Schenker is now part of DSV, and the old tracking page redirects to a DSV page with a different layout.
 > Live lookups will therefore most likely return "No shipment found". The parsing code is still covered by
